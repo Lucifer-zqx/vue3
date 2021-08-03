@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue3响应式原理</title>
+</head>
+<body>
+    <script>
+        //源数据
+        let person = {
+            name:'zhangsan',
+            age:18
+        }
+
+        let p = {}
+
+        //**使用vue2实现数据劫持,只需要掌握住这个劫持对象p，就能够实现响应式**//
+
+        // Object.defineProperty(obj,'prop',{options})
+        Object.defineProperty(p,'name',{
+            //enumerable:true,   forin遍历和Object.keys只能遍历可枚举的属性值
+            //configurable:true, 表示定义的属性是否能够被删除，或者更改配置
+            //writable:true,     该属性为true时，才能修改定义的属性值
+            // value:"male",     该属性为对象属性指定出使值
+            //访问该对象属性时调用，
+            get(){
+                
+                //返回值就是访问该属性时得到的值
+                return person.name
+            },
+            //修改该对象属性时调用，并将修改后的新值传入参数
+            set(newValue){
+                console.log('有人更改了person的name属性值，我要去修改页面了')
+                person.name = newValue
+            }
+        })
+
+        Object.defineProperty(p,'age',{
+            configurable:true,
+            get(){
+                return person.age
+            },
+            set(newValue){
+                console.log('有人更改了person的age属性值，我要去修改页面了')
+                person.age = newValue
+            }
+
+        })
+
+        /* for (const key in person) {
+            if (Object.hasOwnProperty.call(person, key)) {
+                const element = person[key];
+                console.log(element)
+            }
+        } */
+
+        // person.sex="female"
+        // console.log(person)
+    </script>
+    
+</body>
+</html>
